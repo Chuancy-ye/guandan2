@@ -1,15 +1,15 @@
-#import copy
+
 import xlrd
 import random
 grouppool=[]
 total=[]
-
 sgrecord=[]
-def import_xl():
-    data=xlrd.open_workbook("data.xlsx")
+
+def import_xl(path):
+    data=xlrd.open_workbook(path)
     table=data.sheets()[0]
     data_list=[]
-    data_list.extend(table.col_values(1))
+    data_list.extend(table.col_values(0))
     return data_list
 def addname(name):
     return name
@@ -53,7 +53,9 @@ def yanzheng(group,sg):
     return a
 
 def main():
-    a=import_xl()
+    path="C:/Users/Admin/PycharmProjects/guandan/guandan2/data.xls"
+    a=import_xl(path)
+
     name=addname(a)
     name = daluan(name,len(name))
     grouppool=parter(name)
@@ -67,3 +69,6 @@ def main():
         count=count+1
     return total
     # print("count=",count)
+if __name__ == '__main__':
+    total=main()
+    print(total)

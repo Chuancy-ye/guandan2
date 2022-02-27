@@ -48,10 +48,14 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog):
+
+
+
+def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Ui_Dialog()
+    ex.show()
     sys.exit(app.exec_())
