@@ -4,7 +4,9 @@ from PyQt5.QtWidgets import QApplication, QDialog,QWidget,QLabel,QFileDialog,QMa
 from PyQt5 import QtGui, QtCore
 from table import Example
 from name_table import Ui_name
+import Server
 import guandan
+from Server import Server_table,about
 class Guandan(QMainWindow):
 
     def __init__(self, parent=None):
@@ -19,7 +21,7 @@ class Guandan(QMainWindow):
         self.center()
         self.setWindowTitle('掼蛋神器')
         self.show()
-        self.ui.pushButton.clicked.connect(self.name2)
+        self.ui.pushButton.clicked.connect(self.table)
     def menu(self):
         exitAction = QAction('&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
@@ -29,7 +31,6 @@ class Guandan(QMainWindow):
         about = QAction('&About',self)
         about.setShortcut('Ctrl+A')
         about.triggered.connect(self.about)
-
         # openFile = QAction('Open', self)
         # openFile.setShortcut('Ctrl+O')
         # openFile.setStatusTip('Open new File')
@@ -38,7 +39,7 @@ class Guandan(QMainWindow):
         importName =QAction('添加',self)
         importName.setShortcut('Ctrl+i')
         importName.setStatusTip('从excel导入名单')
-        importName.triggered.connect(self.name2)
+        importName.triggered.connect(self.table)
 
         menubar= self.menuBar()
         fileMenu=menubar.addMenu('&File')
@@ -48,55 +49,16 @@ class Guandan(QMainWindow):
         fileMenu.addAction(importName)
 
     def table(self):
-        self.name = Example()
-
-
-    def name2(self):
-        self.ui2 = QWidget()
-        self.name = Ui_name()
-        self.name.setupUi(self.ui2)
-        self.name.commandLinkButton.clicked.connect(self.importXls)
-        self.ui2.show()
-
-
+        self.name=Server_table()
 
     def about(self):
         msg = "作者：叶祥鹰" "\n中科大东区理化大楼" "\n\n邮箱：1982919845@qq.com" "\n更多开源：www.github.com/Chuancy-Ye"
-        reply= QMessageBox.information(self, '欢迎使用',msg,QMessageBox.Ok, QMessageBox.Help
-                                )
-        if reply==QMessageBox.Help:
+        reply = QMessageBox.information(self, '欢迎使用', msg, QMessageBox.Ok, QMessageBox.Help
+                                        )
+        if reply == QMessageBox.Help:
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('www.github.com/Chuancy-Ye/guandan2'))
 
-    def importXls(self):
-        excel = QFileDialog.getOpenFileName(self,'Open','/home')
-        if excel[0]:
-            # print(excel[0])
-            # f= open(excel[0], 'r')
-            # with f:
-            #     data = f.read()
-            #     print(data)
-            #     self.ui.textEdit.setText(data)
-            data = guandan.import_xl(excel[0])
 
-            self.ui.textEdit.setText(str(data))
-            is4 = len(data)%4
-
-            #分解数组
-            list4c=[]
-            if is4 == 0:
-
-                row = int(len(data)/4)
-                for i in range(0,row):
-                    for j in range(0,4):
-                        if j == 0:
-                            list4c.append([])
-                        list4c[i].append(data[j+i*4])
-                        print(data[j+i*4])
-                        name = QTableWidgetItem(str(data[j+i*4]))
-                        self.name.tableWidget.setItem(i, j, name)
-
-            # for i in range(0,len(list4c)):
-            #     for j in range(0,)
     def closeEvent(self, event):
 
         reply = QMessageBox.question(self, 'Message',
