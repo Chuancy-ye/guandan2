@@ -6,7 +6,7 @@ from table import Example
 from name_table import Ui_name
 import Server
 import guandan
-from Server import Server_table,about
+from Server import importName,checkName
 class Guandan(QMainWindow):
 
     def __init__(self, parent=None):
@@ -21,7 +21,8 @@ class Guandan(QMainWindow):
         self.center()
         self.setWindowTitle('掼蛋神器')
         self.show()
-        self.ui.pushButton.clicked.connect(self.table)
+        self.ui.pushButton.clicked.connect(self.importName)
+        self.ui.pushButton_4.clicked.connect(self.chouqian)
     def menu(self):
         exitAction = QAction('&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
@@ -39,7 +40,12 @@ class Guandan(QMainWindow):
         importName =QAction('添加',self)
         importName.setShortcut('Ctrl+i')
         importName.setStatusTip('从excel导入名单')
-        importName.triggered.connect(self.table)
+        importName.triggered.connect(self.importName)
+
+        checkName = QAction('查看', self)
+        checkName.setShortcut('Ctrl+c')
+        checkName.setStatusTip('查看或修改参赛人员')
+        checkName.triggered.connect(self.checkName)
 
         menubar= self.menuBar()
         fileMenu=menubar.addMenu('&File')
@@ -47,10 +53,43 @@ class Guandan(QMainWindow):
         fileMenu.addAction(about)
         fileMenu = menubar.addMenu('&参赛人员')
         fileMenu.addAction(importName)
+        fileMenu.addAction(checkName)
 
-    def table(self):
-        self.name=Server_table()
+    def importName(self):
+        self.name=importName()
+    def checkName(self):
+        self.name=checkName()
+    def chouqian(self):
+        path = 'name'
+        dicname = guandan.readJson(path)
+        lenname = len(dicname)
+        numList = list(range(0,lenname))
+        grouppool = guandan.parter(numList)
+        num1=len(grouppool)
 
+        total=guandan.main(numList)
+
+        row =len(total[0])
+
+        self.ui.tableWidget.setRowCount(row)
+        for i in range(0,len(total[0])):
+
+            for j in range(0,2):
+              namenum=total[0][i][j]
+              dicname=guandan.readJson('name')
+              name = dicname.get(str(namenum))
+
+              print(name)
+              name = QTableWidgetItem(str(name))
+              print('1')
+              self.ui.tableWidget.setItem(i,j,name)
+
+        num2 = len(total)
+        record = {'groupool':grouppool,'num':1,'total':total}
+        self.ui.textBrowser.setText(
+            "共有"+str(num1)+"种组队方式，"+"可以比赛"+str(num2)+"次。"+"\n详情请点击组队池"
+        )
+        guandan.writeJson('sg',record)
     def about(self):
         msg = "作者：叶祥鹰" "\n中科大东区理化大楼" "\n\n邮箱：1982919845@qq.com" "\n更多开源：www.github.com/Chuancy-Ye"
         reply = QMessageBox.information(self, '欢迎使用', msg, QMessageBox.Ok, QMessageBox.Help
