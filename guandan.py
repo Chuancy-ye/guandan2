@@ -8,7 +8,7 @@ def import_xl(path):
     data=xlrd.open_workbook(path)
     table=data.sheets()[0]
     data_list=[]
-    data_list.extend(table.col_values(1))
+    data_list.extend(table.col_values(0))
     return data_list
 def writeJson(path,content):
     with open(path, 'w') as f:
@@ -21,7 +21,7 @@ def dic_to_list(dicname):
     listname = []
     num = len(dicname)
     for i in range(0, num):
-        print(i)
+
         name = (dicname.get(str(i)))
         listname.append(name)
     return listname

@@ -3,10 +3,10 @@ import qtui
 from PyQt5.QtWidgets import QApplication, QDialog,QWidget,QLabel,QFileDialog,QMainWindow,QMessageBox,QDesktopWidget,QAction,qApp,QTableWidgetItem
 from PyQt5 import QtGui, QtCore
 from table import Example
-from name_table import Ui_name
+from import_table import Ui_name
 import Server
 import guandan
-from Server import importName,checkName
+from Server import importName,checkName,deskPosition
 class Guandan(QMainWindow):
 
     def __init__(self, parent=None):
@@ -21,8 +21,11 @@ class Guandan(QMainWindow):
         self.center()
         self.setWindowTitle('掼蛋神器')
         self.show()
-        self.ui.pushButton.clicked.connect(self.importName)
+        self.ui.pushButton.clicked.connect(self.deakPosition)
+        self.ui.pushButton.setStatusTip('查看座位分布')
         self.ui.pushButton_4.clicked.connect(self.chouqian)
+        self.ui.pushButton_4.setStatusTip('换一组比赛组队')
+        
     def menu(self):
         exitAction = QAction('&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
@@ -32,6 +35,7 @@ class Guandan(QMainWindow):
         about = QAction('&About',self)
         about.setShortcut('Ctrl+A')
         about.triggered.connect(self.about)
+        
         # openFile = QAction('Open', self)
         # openFile.setShortcut('Ctrl+O')
         # openFile.setStatusTip('Open new File')
@@ -59,6 +63,8 @@ class Guandan(QMainWindow):
         self.name=importName()
     def checkName(self):
         self.name=checkName()
+    def deakPosition(self):
+        self.name =deskPosition()
     def chouqian(self):
         path = 'name'
         dicname = guandan.readJson(path)
@@ -78,10 +84,7 @@ class Guandan(QMainWindow):
               namenum=total[0][i][j]
               dicname=guandan.readJson('name')
               name = dicname.get(str(namenum))
-
-              print(name)
               name = QTableWidgetItem(str(name))
-              print('1')
               self.ui.tableWidget.setItem(i,j,name)
 
         num2 = len(total)
