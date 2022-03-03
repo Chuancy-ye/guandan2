@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QDialog,QWidget,QLabel,QFileDialog,QMainWindow,QMessageBox,QDesktopWidget,QAction,qApp,QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QDialog,QWidget,QLabel,QFileDialog,QMainWindow,QAbstractItemView,QMessageBox,QDesktopWidget,QAction,qApp,QTableWidgetItem
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter, QBrush,QColor,QFont
 import guandan
@@ -64,6 +64,7 @@ class importName(action):
         self.tablename.pushButton_2.clicked.connect(self.saveName)
         self.ui2.show()
 
+
 class checkName(action):
     def __init__(self):
         super(checkName, self).__init__()
@@ -73,10 +74,19 @@ class checkName(action):
         self.readname()
         self.tablename.commandLinkButton.clicked.connect(self.importXls)
         self.tablename.pushButton_2.clicked.connect(self.saveName)
+        self.tablename.checkBox.clicked.connect(self.can_change)
+
+
         self.ui3.show()
         # self.checkBox = QtWidgets.QCheckBox()
         # self.checkBox.setGeometry(QtCore.QRect(570, 110, 91, 19))
         # self.checkBox.setObjectName("checkBox")
+    def can_change(self):
+        check = self.tablename.checkBox.isChecked()
+        if check:
+            self.tablename.tableWidget.setEditTriggers(QAbstractItemView.AllEditTriggers)
+        else:
+            self.tablename.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
     def readname(self):
         path='name'
         dicname=guandan.readJson(path)
@@ -84,7 +94,7 @@ class checkName(action):
         row = int(len(dicname) / 4)
         self.tablename.tableWidget.setRowCount(row)
         for i in range(0, row):
-            print(i)
+
             for j in range(0, 4):
                 # 保存为4*n的数组，但是没必要
                 # if j == 0:
@@ -95,7 +105,7 @@ class checkName(action):
                 # 以4列，row行显示
                 name = QTableWidgetItem(name)
                 self.tablename.tableWidget.setItem(i, j, name)
-
+        self.tablename.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
     def saveName(self):
 
         reply = QMessageBox.question(self, '注意',

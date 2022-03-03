@@ -1,5 +1,6 @@
 import sys
 import qtui
+import os
 from PyQt5.QtWidgets import QApplication, QDialog,QWidget,QLabel,QFileDialog,QMainWindow,QMessageBox,QDesktopWidget,QAction,qApp,QTableWidgetItem
 from PyQt5 import QtGui, QtCore
 from table import Example
@@ -19,19 +20,40 @@ class Guandan(QMainWindow):
         self.menu()
         self.statusBar().showMessage('Ready')
         self.center()
-        self.setWindowTitle('掼蛋神器')
-        self.show()
+        self.En_buttton()
         self.ui.pushButton.clicked.connect(self.deakPosition)
         self.ui.pushButton.setStatusTip('查看座位分布')
         self.ui.pushButton_4.clicked.connect(self.chouqian)
         self.ui.pushButton_4.setStatusTip('换一组比赛组队')
-        
+        self.setWindowTitle('掼蛋神器')
+        self.show()
+    def En_menu(self):
+        try:
+            f = open('name')
+            self.ui.menubar.actions()
+            f.close()
+        except IOError:
+            print("File is not accessible.")
+    def En_buttton(self):
+        row=self.ui.tableWidget.rowCount()
+        print(row)
+        if row == 0:
+            self.ui.pushButton.setEnabled(False)
+            self.ui.pushButton_2.setEnabled(False)
+        else:
+            self.ui.pushButton.setEnabled(True)
+            self.ui.pushButton_2.setEnabled(True)
+        try:
+            f = open('sg')
+            self.ui.pushButton_6.setEnabled(True)
+            f.close()
+        except IOError:
+            print("File is not accessible.")
+
     def menu(self):
         exitAction = QAction('&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(qApp.quit)
-
-
         about = QAction('&About',self)
         about.setShortcut('Ctrl+A')
         about.triggered.connect(self.about)
@@ -58,9 +80,11 @@ class Guandan(QMainWindow):
         fileMenu = menubar.addMenu('&参赛人员')
         fileMenu.addAction(importName)
         fileMenu.addAction(checkName)
+        fileMenu=menubar.addAction(importName)
 
     def importName(self):
         self.name=importName()
+        self.En_buttton()
     def checkName(self):
         self.name=checkName()
     def deakPosition(self):
@@ -72,7 +96,6 @@ class Guandan(QMainWindow):
         numList = list(range(0,lenname))
         grouppool = guandan.parter(numList)
         num1=len(grouppool)
-
         total=guandan.main(numList)
 
         row =len(total[0])
@@ -93,6 +116,7 @@ class Guandan(QMainWindow):
             "共有"+str(num1)+"种组队方式，"+"可以比赛"+str(num2)+"次。"+"\n详情请点击组队池"
         )
         guandan.writeJson('sg',record)
+        self.En_buttton()
     def about(self):
         msg = "作者：叶祥鹰" "\n中科大东区理化大楼" "\n\n邮箱：1982919845@qq.com" "\n更多开源：www.github.com/Chuancy-Ye"
         reply = QMessageBox.information(self, '欢迎使用', msg, QMessageBox.Ok, QMessageBox.Help

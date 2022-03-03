@@ -1,4 +1,5 @@
 import json
+#xlrd需要1.2.0版本才能读xlsx,Console:pip install 1.2.0
 import xlrd
 import random
 
@@ -84,7 +85,7 @@ def main(a):
     return total
     # print("count=",count)
 if __name__ == '__main__':
-    path = "C:/Users/Admin/PycharmProjects/guandan/guandan2/data.xls"
+    path = "C:/Users/Admin/PycharmProjects/guandan/guandan2/data.xlsx"
     a = import_xl(path)
     total=main(a)
     print(total)

@@ -7,7 +7,6 @@ from PyQt5 import QtCore
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.initUI()
 
     def initUI(self):
@@ -50,7 +49,6 @@ class Example(QMainWindow):
     def onChanged(self, text):
         self.rbl.setText(text)
         self.rbl.adjustSize()
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
